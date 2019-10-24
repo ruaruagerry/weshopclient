@@ -2,75 +2,112 @@ var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
 
 Page({
-  data: {
-    navList: [],
-    categoryList: [],
-    currentCategory: {},
-    scrollLeft: 0,
-    scrollTop: 0,
-    goodsCount: 0,
-    scrollHeight: 0
-  },
-  onLoad: function (options) {
-    this.getCatalog();
-  },
-  getCatalog: function () {
-    //CatalogList
-    let that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
-    util.request(api.CatalogList).then(function (res) {
+    data: {
+        navList: [],
+        categoryList: [],
+        currentCategory: {},
+        scrollLeft: 0,
+        scrollTop: 0,
+        goodsCount: 0,
+        scrollHeight: 0
+    },
+    onLoad: function () {
+        this.getCatalog();
+    },
+    getCatalog: function () {
+        //CatalogList
+        let that = this;
+        wx.showLoading({
+            title: '加载中...',
+        });
+        // util.request(api.CatalogList).then(function (res) {
+        var category1 = {
+            "banner_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "front_desc": "1",
+            "front_name": "1",
+            "icon_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "id": 1,
+            "img_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "is_show": 1,
+            "keywords": "1",
+            "level": "1",
+            "name": "1",
+            "parent_id": 1,
+            "show_index": 1,
+            "sort_order": 1,
+            "type": 1,
+            "wap_banner_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+        }
+
+        var category2 = {
+            "banner_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "front_desc": "2",
+            "front_name": "2",
+            "icon_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "id": 2,
+            "img_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "is_show": 2,
+            "keywords": "2",
+            "level": "2",
+            "name": "2",
+            "parent_id": 2,
+            "show_index": 2,
+            "sort_order": 2,
+            "type": 2,
+            "wap_banner_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+        }
+
+        var myArray = new Array()
+        myArray[0] = category1
+        myArray[1] = category2
+
         that.setData({
-          navList: res.data.categoryList,
-          currentCategory: res.data.currentCategory
+            navList: myArray,
+            currentCategory: category2
         });
         wx.hideLoading();
-      });
-    util.request(api.GoodsCount).then(function (res) {
-      that.setData({
-        goodsCount: res.data.goodsCount
-      });
-    });
+        // });
+        util.request(api.GoodsCount).then(function (res) {
+            that.setData({
+                goodsCount: res.data.goodsCount
+            });
+        });
+    },
+    getCurrentCategory: function (id) {
+        let that = this;
+        util.request(api.CatalogCurrent, { id: id })
+            .then(function (res) {
+                that.setData({
+                    currentCategory: res.data.currentCategory
+                });
+            });
+    },
+    onReady: function () {
+        // 页面渲染完成
+    },
+    onShow: function () {
+        // 页面显示
+    },
+    onHide: function () {
+        // 页面隐藏
+    },
+    onUnload: function () {
+        // 页面关闭
+    },
+    getList: function () {
+        var that = this;
+        util.request(api.ApiRootUrl + 'api/catalog/' + that.data.currentCategory.cat_id)
+            .then(function (res) {
+                that.setData({
+                    categoryList: res.data,
+                });
+            });
+    },
+    switchCate: function (event) {
+        if (this.data.currentCategory.id == event.currentTarget.dataset.id) {
+            return false;
+        }
 
-  },
-  getCurrentCategory: function (id) {
-    let that = this;
-    util.request(api.CatalogCurrent, { id: id })
-      .then(function (res) {
-        that.setData({
-          currentCategory: res.data.currentCategory
-        });
-      });
-  },
-  onReady: function () {
-    // 页面渲染完成
-  },
-  onShow: function () {
-    // 页面显示
-  },
-  onHide: function () {
-    // 页面隐藏
-  },
-  onUnload: function () {
-    // 页面关闭
-  },
-  getList: function () {
-    var that = this;
-    util.request(api.ApiRootUrl + 'api/catalog/' + that.data.currentCategory.cat_id)
-      .then(function (res) {
-        that.setData({
-          categoryList: res.data,
-        });
-      });
-  },
-  switchCate: function (event) {
-    var that = this;
-    var currentTarget = event.currentTarget;
-    if (this.data.currentCategory.id == event.currentTarget.dataset.id) {
-      return false;
+        this.getCurrentCategory(event.currentTarget.dataset.id);
     }
-
-    this.getCurrentCategory(event.currentTarget.dataset.id);
-  }
 })
