@@ -22,12 +22,12 @@ Page({
         });
         // util.request(api.CatalogList).then(function (res) {
         var category1 = {
-            "banner_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "front_desc": "1",
             "front_name": "1",
-            "icon_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "icon_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "id": 1,
-            "img_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "img_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "is_show": 1,
             "keywords": "1",
             "level": "1",
@@ -36,16 +36,16 @@ Page({
             "show_index": 1,
             "sort_order": 1,
             "type": 1,
-            "wap_banner_url": "http://pic37.nipic.com/20140119/9353120_232654315191_2.jpg",
+            "wap_banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
         }
 
         var category2 = {
-            "banner_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "front_desc": "2",
             "front_name": "2",
-            "icon_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "icon_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "id": 2,
-            "img_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "img_url": "https://zhidao.baidu.com/question/140498621394990805.html",
             "is_show": 2,
             "keywords": "2",
             "level": "2",
@@ -54,7 +54,7 @@ Page({
             "show_index": 2,
             "sort_order": 2,
             "type": 2,
-            "wap_banner_url": "http://b-ssl.duitang.com/uploads/blog/201312/04/20131204184148_hhXUT.jpeg",
+            "wap_banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
         }
 
         var myArray = new Array()
