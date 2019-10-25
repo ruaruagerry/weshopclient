@@ -19,14 +19,14 @@ Page({
         });
         util.request(api.CatalogList).then(function (res) {
             that.setData({
-                navList: res.data.navlist,
-                categoryList: res.data.catagorylist
+                navList: res.navlist,
+                categoryList: res.catagorylist
             });
             wx.hideLoading();
         });
         util.request(api.GoodsCount).then(function (res) {
             that.setData({
-                goodsCount: res.data.goodsCount
+                goodsCount: res.goodscount
             });
         });
     },
@@ -36,7 +36,7 @@ Page({
         util.request(api.CatalogCurrent, param)
             .then(function (res) {
                 that.setData({
-                    categoryList: res.data.catagorylist
+                    categoryList: res.catagorylist
                 });
             });
     },
