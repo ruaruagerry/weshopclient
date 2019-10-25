@@ -4,12 +4,9 @@ var api = require('../../config/api.js');
 Page({
     data: {
         navList: [],
+        navListIndex: 0,
         categoryList: [],
-        currentCategory: {},
-        scrollLeft: 0,
-        scrollTop: 0,
         goodsCount: 0,
-        scrollHeight: 0
     },
     onLoad: function () {
         this.getCatalog();
@@ -20,53 +17,13 @@ Page({
         wx.showLoading({
             title: '加载中...',
         });
-        // util.request(api.CatalogList).then(function (res) {
-        var category1 = {
-            "banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "front_desc": "1",
-            "front_name": "1",
-            "icon_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "id": 1,
-            "img_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "is_show": 1,
-            "keywords": "1",
-            "level": "1",
-            "name": "1",
-            "parent_id": 1,
-            "show_index": 1,
-            "sort_order": 1,
-            "type": 1,
-            "wap_banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-        }
-
-        var category2 = {
-            "banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "front_desc": "2",
-            "front_name": "2",
-            "icon_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "id": 2,
-            "img_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-            "is_show": 2,
-            "keywords": "2",
-            "level": "2",
-            "name": "2",
-            "parent_id": 2,
-            "show_index": 2,
-            "sort_order": 2,
-            "type": 2,
-            "wap_banner_url": "https://zhidao.baidu.com/question/140498621394990805.html",
-        }
-
-        var myArray = new Array()
-        myArray[0] = category1
-        myArray[1] = category2
-
-        that.setData({
-            navList: myArray,
-            currentCategory: category2
+        util.request(api.CatalogList).then(function (res) {
+            that.setData({
+                navList: res.data.navlist,
+                categoryList: res.data.catagorylist
+            });
+            wx.hideLoading();
         });
-        wx.hideLoading();
-        // });
         util.request(api.GoodsCount).then(function (res) {
             that.setData({
                 goodsCount: res.data.goodsCount
@@ -75,10 +32,11 @@ Page({
     },
     getCurrentCategory: function (id) {
         let that = this;
-        util.request(api.CatalogCurrent, { id: id })
+        let param = { id: id }
+        util.request(api.CatalogCurrent, param)
             .then(function (res) {
                 that.setData({
-                    currentCategory: res.data.currentCategory
+                    categoryList: res.data.catagorylist
                 });
             });
     },
@@ -94,17 +52,12 @@ Page({
     onUnload: function () {
         // 页面关闭
     },
-    getList: function () {
-        var that = this;
-        util.request(api.ApiRootUrl + 'api/catalog/' + that.data.currentCategory.cat_id)
-            .then(function (res) {
-                that.setData({
-                    categoryList: res.data,
-                });
-            });
-    },
     switchCate: function (event) {
-        if (this.data.currentCategory.id == event.currentTarget.dataset.id) {
+        this.setData({
+            navListIndex: event.currentTarget.dataset.index,
+        })
+
+        if (this.data.categoryList.id == event.currentTarget.dataset.id) {
             return false;
         }
 

@@ -1,4 +1,4 @@
-const ApiRootUrl = 'http://127.0.0.1:8080/api/';
+const ApiRootUrl = 'http://127.0.0.1:3001/';
 
 module.exports = {
     CatalogList: ApiRootUrl + 'catalog/index',  //分类目录全部分类数据接口
