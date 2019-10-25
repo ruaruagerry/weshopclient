@@ -33,7 +33,7 @@ Page({
     getCurrentCategory: function (id) {
         let that = this;
         let param = { id: id }
-        util.request(api.CatalogCurrent, param)
+        util.request(api.CatalogCurrent, param, "POST")
             .then(function (res) {
                 that.setData({
                     categoryList: res.catagorylist

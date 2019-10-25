@@ -13,7 +13,7 @@
         </scroll-view>
         <scroll-view class="cate" scroll-y="true">
             <navigator url="url" class="banner">
-                <image class="image" wx:if="{{navList[navListIndex].wap_banner_url}}" src="{{navList[navListIndex].wap_banner_url}}"></image>
+                <image class="image" wx:if="{{navList[navListIndex].bannerurl}}" src="{{navList[navListIndex].bannerurl}}"></image>
                 <view class="txt">{{navList[navListIndex].front_name}}</view>
             </navigator>
             <view class="hd">
@@ -23,7 +23,7 @@
             </view>
             <view class="bd">
                 <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{categoryList}}">
-                    <image class="icon" wx:if="{{item.wap_banner_url}}" src="{{item.wap_banner_url}}"></image>
+                    <image class="icon" wx:if="{{item.url}}" src="{{item.url}}"></image>
                     <text class="txt">{{item.name}}</text>
                 </navigator>
             </view>
