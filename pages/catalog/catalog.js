@@ -5,7 +5,6 @@ var app = getApp()
 Page({
     data: {
         navListIndex: 0,
-        goodsCount: 0,
     },
     onLoad: function () {
         this.getCatalog();
@@ -18,7 +17,9 @@ Page({
         });
         util.request(api.CatalogList).then(function (res) {
             app.navList = res.navlist
+            app.navListIndex = res.curnavindex
 
+            console.log("catagorylist:", res.catagorylist)
             that.setData({
                 navList: res.navlist,
                 categoryList: res.catagorylist
@@ -54,6 +55,8 @@ Page({
         // 页面关闭
     },
     switchCate: function (event) {
+        app.navListIndex = event.currentTarget.dataset.index
+
         this.setData({
             navListIndex: event.currentTarget.dataset.index,
         })

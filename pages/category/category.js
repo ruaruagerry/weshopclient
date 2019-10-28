@@ -6,10 +6,8 @@ Page({
     data: {
         // text:"这是一个页面"
         goodsList: [],
-        id: 0,
         currentCategory: {},
         scrollLeft: 0,
-        scrollTop: 0,
         scrollHeight: 0,
         page: 1,
         size: 10000
@@ -19,7 +17,8 @@ Page({
         var that = this;
         if (options.id) {
             that.setData({
-                id: parseInt(options.id)
+                id: parseInt(options.id),
+                catagoryid: options.catagoryid,
             });
         }
 
@@ -31,34 +30,24 @@ Page({
             }
         });
 
-
-        this.getCategoryInfo();
-
+        this.getGoodsList();
     },
-    getCategoryInfo: function () {
+    getGoodsList: function () {
         let that = this;
-        util.request(api.GoodsCategory, { id: this.data.id })
+        util.request(api.GoodsList, { catagoryid: this.data.catagoryid }, "POST")
             .then(function (res) {
                 that.setData({
                     navList: app.navList,
-                    // currentCategory: res.data.currentCategory
+                    navListIndex: app.navListIndex,
+                    goodsList: res.goodslist
                 });
 
-                //nav位置
-                // let currentIndex = 0;
-                // let navListCount = that.data.navList.length;
-                // for (let i = 0; i < navListCount; i++) {
-                //     currentIndex += 1;
-                //     if (that.data.navList[i].id == that.data.id) {
-                //         break;
-                //     }
-                // }
-                // if (currentIndex > navListCount / 2 && navListCount > 5) {
-                //     that.setData({
-                //         scrollLeft: currentIndex * 60
-                //     });
-                // }
-                // that.getGoodsList();
+                let navListCount = app.navList.length;
+                if (app.navListIndex > navListCount / 2 && navListCount > 5) {
+                    that.setData({
+                        scrollLeft: app.navListIndex * 60
+                    });
+                }
             });
     },
     onReady: function () {
@@ -71,16 +60,6 @@ Page({
     onHide: function () {
         // 页面隐藏
     },
-    getGoodsList: function () {
-        var that = this;
-
-        util.request(api.GoodsList, { categoryId: that.data.id, page: that.data.page, size: that.data.size })
-            .then(function (res) {
-                that.setData({
-                    goodsList: res.data.goodsList,
-                });
-            });
-    },
     onUnload: function () {
         // 页面关闭
     },
@@ -88,6 +67,7 @@ Page({
         if (this.data.id == event.currentTarget.dataset.id) {
             return false;
         }
+
         var that = this;
         var clientX = event.detail.x;
         var currentTarget = event.currentTarget;
@@ -100,7 +80,10 @@ Page({
                 scrollLeft: currentTarget.offsetLeft
             });
         }
+
+        app.navListIndex = event.currentTarget.dataset.index
         this.setData({
+            navListIndex: event.currentTarget.dataset.index,
             id: event.currentTarget.dataset.id
         });
 
