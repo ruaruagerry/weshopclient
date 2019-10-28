@@ -18,7 +18,7 @@ Page({
         if (options.id) {
             that.setData({
                 id: parseInt(options.id),
-                catagoryid: options.catagoryid,
+                categoryid: options.categoryid,
             });
         }
 
@@ -34,18 +34,21 @@ Page({
     },
     getGoodsList: function () {
         let that = this;
-        util.request(api.GoodsList, { catagoryid: this.data.catagoryid }, "POST")
+        util.request(api.GoodsList, { categoryid: this.data.categoryid }, "POST")
             .then(function (res) {
+                console.log("app.categoryList:", app.categoryList)
+                console.log("app.categoryIndex:", app.categoryIndex)
+
                 that.setData({
-                    navList: app.navList,
-                    navListIndex: app.navListIndex,
+                    categoryList: app.categoryList,
+                    categoryIndex: app.categoryIndex,
                     goodsList: res.goodslist
                 });
 
-                let navListCount = app.navList.length;
-                if (app.navListIndex > navListCount / 2 && navListCount > 5) {
+                let categoryCount = app.categoryList.length;
+                if (app.categoryList > categoryCount / 2 && categoryCount > 5) {
                     that.setData({
-                        scrollLeft: app.navListIndex * 60
+                        scrollLeft: app.categoryIndex * 60
                     });
                 }
             });
@@ -64,7 +67,7 @@ Page({
         // 页面关闭
     },
     switchCate: function (event) {
-        if (this.data.id == event.currentTarget.dataset.id) {
+        if (this.data.categoryid == event.currentTarget.dataset.categoryid) {
             return false;
         }
 
@@ -81,12 +84,12 @@ Page({
             });
         }
 
-        app.navListIndex = event.currentTarget.dataset.index
         this.setData({
-            navListIndex: event.currentTarget.dataset.index,
-            id: event.currentTarget.dataset.id
+            categoryIndex: event.currentTarget.dataset.index,
+            categoryid: event.currentTarget.dataset.categoryid
         });
+        app.categoryIndex = event.currentTarget.dataset.index
 
-        this.getCategoryInfo();
+        this.getGoodsList();
     }
 })

@@ -5,6 +5,7 @@ var app = getApp()
 Page({
     data: {
         navListIndex: 0,
+        categoryIndex: 0,
     },
     onLoad: function () {
         this.getCatalog();
@@ -16,13 +17,12 @@ Page({
             title: '加载中...',
         });
         util.request(api.CatalogList).then(function (res) {
-            app.navList = res.navlist
-            app.navListIndex = res.curnavindex
+            app.categoryList = res.categorylist
+            app.categoryIndex = that.data.categoryIndex
 
-            console.log("catagorylist:", res.catagorylist)
             that.setData({
                 navList: res.navlist,
-                categoryList: res.catagorylist
+                categoryList: res.categorylist
             });
             wx.hideLoading();
         });
@@ -38,7 +38,7 @@ Page({
         util.request(api.CatalogCurrent, param, "POST")
             .then(function (res) {
                 that.setData({
-                    categoryList: res.catagorylist
+                    categoryList: res.categorylist
                 });
             });
     },
@@ -55,15 +55,15 @@ Page({
         // 页面关闭
     },
     switchCate: function (event) {
-        app.navListIndex = event.currentTarget.dataset.index
+        if (this.data.categoryList.id == event.currentTarget.dataset.id) {
+            return false;
+        }
 
         this.setData({
             navListIndex: event.currentTarget.dataset.index,
         })
 
-        if (this.data.categoryList.id == event.currentTarget.dataset.id) {
-            return false;
-        }
+        app.categoryIndex = event.currentTarget.dataset.categoryIndex
 
         this.getCurrentCategory(event.currentTarget.dataset.id);
     }

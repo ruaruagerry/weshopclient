@@ -22,7 +22,7 @@
                 <text class="line"></text>
             </view>
             <view class="bd">
-                <navigator url="/pages/category/category?id={{item.id}}&catagoryid={{item.catagoryid}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{categoryList}}">
+                <navigator url="/pages/category/category?id={{item.id}}&categoryid={{item.categoryid}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{categoryList}}" data-categoryindex="{{categoryIndex}}">
                     <image class="icon" wx:if="{{item.url}}" src="{{item.url}}"></image>
                     <text class="txt">{{item.name}}</text>
                 </navigator>
