@@ -94,9 +94,11 @@ function request (url, data = {}, method = "GET") {
                         })
                         reject(res.data.msg)
                     }
-
-                    res.data.data = base64_decode(res.data.data)
-                    var jsondata = JSON.parse(res.data.data)
+                    var jsondata = new Object()
+                    if (res.data.data != undefined) {
+                        res.data.data = base64_decode(res.data.data)
+                        jsondata = JSON.parse(res.data.data)
+                    }
                     resolve(jsondata)
                     // 微信登录
                     // if (res.data.errno == 401) {

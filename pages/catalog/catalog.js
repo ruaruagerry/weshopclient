@@ -1,11 +1,10 @@
 var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
+var app = getApp()
 
 Page({
     data: {
-        navList: [],
         navListIndex: 0,
-        categoryList: [],
         goodsCount: 0,
     },
     onLoad: function () {
@@ -18,6 +17,8 @@ Page({
             title: '加载中...',
         });
         util.request(api.CatalogList).then(function (res) {
+            app.navList = res.navlist
+
             that.setData({
                 navList: res.navlist,
                 categoryList: res.catagorylist

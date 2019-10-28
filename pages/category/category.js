@@ -1,10 +1,10 @@
 var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
+var app = getApp()
 
 Page({
     data: {
         // text:"这是一个页面"
-        navList: [],
         goodsList: [],
         id: 0,
         currentCategory: {},
@@ -39,33 +39,26 @@ Page({
         let that = this;
         util.request(api.GoodsCategory, { id: this.data.id })
             .then(function (res) {
+                that.setData({
+                    navList: app.navList,
+                    // currentCategory: res.data.currentCategory
+                });
 
-                if (res.errno == 0) {
-                    that.setData({
-                        navList: res.data.brotherCategory,
-                        currentCategory: res.data.currentCategory
-                    });
-
-                    //nav位置
-                    let currentIndex = 0;
-                    let navListCount = that.data.navList.length;
-                    for (let i = 0; i < navListCount; i++) {
-                        currentIndex += 1;
-                        if (that.data.navList[i].id == that.data.id) {
-                            break;
-                        }
-                    }
-                    if (currentIndex > navListCount / 2 && navListCount > 5) {
-                        that.setData({
-                            scrollLeft: currentIndex * 60
-                        });
-                    }
-                    that.getGoodsList();
-
-                } else {
-                    //显示错误信息
-                }
-
+                //nav位置
+                // let currentIndex = 0;
+                // let navListCount = that.data.navList.length;
+                // for (let i = 0; i < navListCount; i++) {
+                //     currentIndex += 1;
+                //     if (that.data.navList[i].id == that.data.id) {
+                //         break;
+                //     }
+                // }
+                // if (currentIndex > navListCount / 2 && navListCount > 5) {
+                //     that.setData({
+                //         scrollLeft: currentIndex * 60
+                //     });
+                // }
+                // that.getGoodsList();
             });
     },
     onReady: function () {
