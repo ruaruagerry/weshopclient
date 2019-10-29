@@ -29,32 +29,32 @@ Page({
             good: JSON.parse(decodeURIComponent(options.good)),
         });
 
-        var that = this;
-        util.request(api.CartGoodsCount).then(function (res) {
-            if (res.errno === 0) {
-                that.setData({
-                    cartGoodsCount: res.data.cartTotal.goodsCount
-                });
-            }
-        });
+        // var that = this;
+        // util.request(api.CartGoodsCount).then(function (res) {
+        //     if (res.errno === 0) {
+        //         that.setData({
+        //             cartGoodsCount: res.data.cartTotal.goodsCount
+        //         });
+        //     }
+        // });
 
-        // this.getGoodsInfo();
+        this.getGoodsInfo();
     },
     getGoodsInfo: function () {
         let that = this;
-        util.request(api.GoodsDetail, { goodid: that.data.good.goodid }, "POST").then(function (res) {
-            if (res.errno === 0) {
+        util.request(api.GoodsDetail, { goodid: that.data.good.goodid }, "POST")
+            .then(function (res) {
                 that.setData({
-                    gallery: res.data.gallery,
-                    attribute: res.data.attribute,
-                    issueList: res.data.issue,
-                    brand: res.data.brand,
-                    specificationList: res.data.specificationList,
-                    productList: res.data.productList,
-                    userHasCollect: res.data.userHasCollect
+                    gallery: res.gallery,
+                    attribute: res.attribute,
+                    issueList: res.issue,
+                    brand: res.brand,
+                    specificationList: [],
+                    productList: [],
+                    userHasCollect: 1
                 });
 
-                if (res.data.userHasCollect == 1) {
+                if (that.data.userHasCollect == 1) {
                     that.setData({
                         'collectBackImage': that.data.hasCollectImage
                     });
@@ -64,10 +64,8 @@ Page({
                     });
                 }
 
-                WxParse.wxParse('goodsDetail', 'html', res.data.info.goods_desc, that);
-            }
-        });
-
+                // WxParse.wxParse('goodsDetail', 'html', res.data.info.goods_desc, that);
+            });
     },
     clickSkuValue: function (event) {
         let specNameId = event.currentTarget.dataset.nameId;
