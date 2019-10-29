@@ -97,10 +97,8 @@ Page({
         // 设置全局变量
     },
     toGoods: function (event) {
-        // console.log("good:", JSON.stringify(event.currentTarget.dataset.good))
-
         wx.navigateTo({
-            url: '/pages/goods/goods?good=' + encodeURIComponent(JSON.stringify(event.currentTarget.dataset.good)),
+            url: "/pages/goods/goods?good=" + encodeURIComponent(JSON.stringify(event.currentTarget.dataset.good)),
         })
     }
 })
