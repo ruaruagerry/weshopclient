@@ -9,8 +9,6 @@ Page({
         currentCategory: {},
         scrollLeft: 0,
         scrollHeight: 0,
-        page: 1,
-        size: 10000
     },
     onLoad: function (options) {
         // 页面初始化 options为页面跳转所带来的参数
@@ -95,5 +93,14 @@ Page({
         });
 
         this.getGoodsList();
+
+        // 设置全局变量
+    },
+    toGoods: function (event) {
+        // console.log("good:", JSON.stringify(event.currentTarget.dataset.good))
+
+        wx.navigateTo({
+            url: '/pages/goods/goods?good=' + encodeURIComponent(JSON.stringify(event.currentTarget.dataset.good)),
+        })
     }
 })
