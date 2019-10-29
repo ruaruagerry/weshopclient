@@ -33,7 +33,7 @@
       </view>
       <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
     </view> -->
-    <view class="comments" wx:if="{{comment.count > 0}}">
+    <!-- <view class="comments" wx:if="{{comment.count > 0}}">
         <view class="h">
             <navigator url="../comment/comment?valueId={{good.goodid}}&typeId=0">
                 <text class="t">评价({{comment.count > 999 ? '999+' : comment.count}})</text>
@@ -53,10 +53,9 @@
                 <view class="imgs" wx:if="{{comment.data.pic_list.length > 0}}">
                     <image class="img" wx:for="{{comment.data.pic_list}}" wx:key="{{item.id}}" src="{{item.pic_url}}"></image>
                 </view>
-                <!-- <view class="spec">白色 2件</view> -->
             </view>
         </view>
-    </view>
+    </view> -->
     <view class="goods-attr">
         <view class="t">商品参数</view>
         <view class="l">
@@ -85,7 +84,7 @@
             </view>
         </view>
     </view>
-    <view class="related-goods" wx:if="{{relatedGoods.length > 0}}">
+    <!-- <view class="related-goods" wx:if="{{relatedGoods.length > 0}}">
         <view class="h">
             <view class="line"></view>
             <text class="title">大家都在看</text>
@@ -99,7 +98,7 @@
                 </navigator>
             </view>
         </view>
-    </view>
+    </view> -->
 </view>
 <view class="attr-pop-box" hidden="{{!openAttr}}">
     <view class="attr-pop">

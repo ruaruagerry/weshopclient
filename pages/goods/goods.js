@@ -48,7 +48,6 @@ Page({
                     gallery: res.data.gallery,
                     attribute: res.data.attribute,
                     issueList: res.data.issue,
-                    comment: res.data.comment,
                     brand: res.data.brand,
                     specificationList: res.data.specificationList,
                     productList: res.data.productList,
@@ -66,25 +65,11 @@ Page({
                 }
 
                 WxParse.wxParse('goodsDetail', 'html', res.data.info.goods_desc, that);
-
-                that.getGoodsRelated();
-            }
-        });
-
-    },
-    getGoodsRelated: function () {
-        let that = this;
-        util.request(api.GoodsRelated, { id: that.data.id }).then(function (res) {
-            if (res.errno === 0) {
-                that.setData({
-                    relatedGoods: res.data.goodsList,
-                });
             }
         });
 
     },
     clickSkuValue: function (event) {
-        let that = this;
         let specNameId = event.currentTarget.dataset.nameId;
         let specValueId = event.currentTarget.dataset.valueId;
 
