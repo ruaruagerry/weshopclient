@@ -18,7 +18,6 @@ Page({
         });
         util.request(api.CatalogList).then(function (res) {
             app.categoryList = res.categorylist
-            app.categoryIndex = that.data.categoryIndex
 
             that.setData({
                 navList: res.navlist,
@@ -62,8 +61,6 @@ Page({
         this.setData({
             navListIndex: event.currentTarget.dataset.index,
         })
-
-        app.categoryIndex = event.currentTarget.dataset.categoryIndex
 
         this.getCurrentCategory(event.currentTarget.dataset.id);
     }

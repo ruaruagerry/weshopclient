@@ -36,19 +36,25 @@ Page({
         let that = this;
         util.request(api.GoodsList, { categoryid: this.data.categoryid }, "POST")
             .then(function (res) {
-                console.log("app.categoryList:", app.categoryList)
-                console.log("app.categoryIndex:", app.categoryIndex)
+                // category index
+                var curindex = 0
+                for (let i = 0; i < app.categoryList.length; i++) {
+                    if (app.categoryList[i].categoryid == that.data.categoryid) {
+                        curindex = i
+                        break
+                    }
+                }
 
                 that.setData({
                     categoryList: app.categoryList,
-                    categoryIndex: app.categoryIndex,
+                    categoryIndex: curindex,
                     goodsList: res.goodslist
                 });
 
                 let categoryCount = app.categoryList.length;
                 if (app.categoryList > categoryCount / 2 && categoryCount > 5) {
                     that.setData({
-                        scrollLeft: app.categoryIndex * 60
+                        scrollLeft: curindex * 60
                     });
                 }
             });
@@ -85,10 +91,8 @@ Page({
         }
 
         this.setData({
-            categoryIndex: event.currentTarget.dataset.index,
             categoryid: event.currentTarget.dataset.categoryid
         });
-        app.categoryIndex = event.currentTarget.dataset.index
 
         this.getGoodsList();
     }
