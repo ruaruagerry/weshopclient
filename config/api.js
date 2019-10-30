@@ -21,7 +21,7 @@ module.exports = {
     CartUpdate: ApiRootUrl + 'cart/update', // 更新购物车的商品
     CartDelete: ApiRootUrl + 'cart/delete', // 删除购物车的商品
     CartChecked: ApiRootUrl + 'cart/checked', // 选择或取消选择商品
-    CartGoodsCount: ApiRootUrl + 'cart/goodscount', // 获取购物车商品件数
+    CartCount: ApiRootUrl + 'cart/count', // 获取购物车商品件数
     CartCheckout: ApiRootUrl + 'cart/checkout', // 下单前信息确认
 
     OrderSubmit: ApiRootUrl + 'order/submit', // 提交订单

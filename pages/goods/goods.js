@@ -21,14 +21,12 @@ Page({
             good: JSON.parse(decodeURIComponent(options.good)),
         });
 
-        // var that = this;
-        // util.request(api.CartGoodsCount).then(function (res) {
-        //     if (res.errno === 0) {
-        //         that.setData({
-        //             cartGoodsCount: res.data.cartTotal.goodsCount
-        //         });
-        //     }
-        // });
+        var that = this;
+        util.request(api.CartCount).then(function (res) {
+            that.setData({
+                cartGoodsCount: res.carttotal
+            });
+        });
 
         this.getGoodsInfo();
     },
@@ -59,7 +57,7 @@ Page({
             });
     },
     clickSkuValue: function (event) {
-        let specNameId = event.currentTarget.dataset.nameId;
+        let specSpecificationid = event.currentTarget.dataset.specificationId;
         let specValueDetailid = event.currentTarget.dataset.valueDetailid;
 
         //判断是否可以点击
@@ -67,7 +65,7 @@ Page({
         //TODO 性能优化，可在wx:for中添加index，可以直接获取点击的属性名和属性值，不用循环
         let _specificationList = this.data.specificationList;
         for (let i = 0; i < _specificationList.length; i++) {
-            if (_specificationList[i].specificationid == specNameId) {
+            if (_specificationList[i].specificationid == specSpecificationid) {
                 for (let j = 0; j < _specificationList[i].valuelist.length; j++) {
                     if (_specificationList[i].valuelist[j].detailid == specValueDetailid) {
                         //如果已经选中，则反选
@@ -97,7 +95,7 @@ Page({
         let _specificationList = this.data.specificationList;
         for (let i = 0; i < _specificationList.length; i++) {
             let _checkedObj = {
-                nameId: _specificationList[i].specificationid,
+                specificationId: _specificationList[i].specificationid,
                 valueDetailid: 0,
                 valueText: ''
             };
@@ -236,26 +234,15 @@ Page({
                 specification: this.data.selectValues,
             }
 
+            console.log("goodinfo:", goodinfo)
+
             //添加到购物车
             util.request(api.CartAdd, { goodinfo: JSON.stringify(goodinfo) }, "POST")
                 .then(function (res) {
-                    let _res = res;
-                    if (_res.errno == 0) {
-                        wx.showToast({
-                            title: '添加成功'
-                        });
-                        that.setData({
-                            openAttr: !that.data.openAttr,
-                            cartGoodsCount: _res.data.cartTotal.goodsCount
-                        });
-                    } else {
-                        wx.showToast({
-                            image: '/static/images/icon_error.png',
-                            title: _res.errmsg,
-                            mask: true
-                        });
-                    }
-
+                    that.setData({
+                        openAttr: !that.data.openAttr,
+                        cartGoodsCount: res.carttotal
+                    });
                 });
         }
     },

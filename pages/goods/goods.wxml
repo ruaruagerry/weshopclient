@@ -118,7 +118,7 @@
             <view class="spec-item" wx:for="{{specificationList}}" wx:key="{{item.specificationid}}">
                 <view class="name">{{item.name}}</view>
                 <view class="values">
-                    <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valuelist}}" wx:for-item="vitem" wx:key="{{vitem.detailid}}" data-value-detailid="{{vitem.detailid}}" data-name-id="{{item.specificationid}}">
+                    <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valuelist}}" wx:for-item="vitem" wx:key="{{vitem.detailid}}" data-value-detailid="{{vitem.detailid}}" data-specification-id="{{item.specificationid}}">
                         {{vitem.value}}
                     </view>
                 </view>
