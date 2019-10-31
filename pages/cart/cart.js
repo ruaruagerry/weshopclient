@@ -1,8 +1,6 @@
 var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
 
-var app = getApp();
-
 Page({
     data: {
         cartGoods: [],
@@ -28,11 +26,9 @@ Page({
     },
     onHide: function () {
         // 页面隐藏
-
     },
     onUnload: function () {
         // 页面关闭
-
     },
     getCartList: function () {
         let that = this;
@@ -49,7 +45,7 @@ Page({
     },
     isCheckedAll: function () {
         //判断购物车商品已全选
-        return this.data.cartGoods.every(function (element, index, array) {
+        return this.data.cartGoods.every(function (element) {
             if (element.checked == true) {
                 return true;
             } else {
@@ -77,7 +73,7 @@ Page({
             });
         } else {
             //编辑状态
-            let tmpCartData = this.data.cartGoods.map(function (element, index, array) {
+            let tmpCartData = this.data.cartGoods.map(function (element, index) {
                 if (index == itemIndex) {
                     element.checked = !element.checked;
                 }
@@ -185,7 +181,6 @@ Page({
 
     },
     cutNumber: function (event) {
-
         let itemIndex = event.target.dataset.itemIndex;
         let cartItem = this.data.cartGoods[itemIndex];
         let number = (cartItem.number - 1 > 1) ? cartItem.number - 1 : 1;
