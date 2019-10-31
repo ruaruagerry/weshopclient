@@ -228,16 +228,8 @@ Page({
                 return false;
             }
 
-            let goodinfo = {
-                goodid: this.data.good.goodid,
-                num: this.data.number,
-                specification: this.data.selectValues,
-            }
-
-            console.log("goodinfo:", goodinfo)
-
             //添加到购物车
-            util.request(api.CartAdd, { goodinfo: JSON.stringify(goodinfo) }, "POST")
+            util.request(api.CartAdd, { goodid: this.data.good.goodid, num: this.data.number, specification: this.data.selectValues }, "POST")
                 .then(function (res) {
                     that.setData({
                         openAttr: !that.data.openAttr,
