@@ -33,6 +33,8 @@ Page({
     getCartList: function () {
         let that = this;
         util.request(api.CartList).then(function (res) {
+            console.log("res.carttotal:", res.carttotal)
+
             that.setData({
                 cartGoods: res.cartlist,
                 cartTotal: res.carttotal
@@ -58,14 +60,21 @@ Page({
         let that = this;
 
         if (!this.data.isEditCart) {
-            util.request(api.CartChecked, { productIds: that.data.cartGoods[itemIndex].product_id, isChecked: that.data.cartGoods[itemIndex].checked ? 0 : 1 }, 'POST').then(function (res) {
-                if (res.errno === 0) {
-                    console.log(res.data);
-                    that.setData({
-                        cartGoods: res.data.cartList,
-                        cartTotal: res.data.cartTotal
-                    });
+            util.request(api.CartChecked, { index: itemIndex, checked: that.data.cartGoods[itemIndex].checked ? false : true }, 'POST').then(function () {
+                that.data.cartGoods[itemIndex].checked = !that.data.cartGoods[itemIndex].checked
+                if (that.data.cartGoods[itemIndex].checked) {
+                    that.data.cartTotal.checkedcount++
+                    that.data.cartTotal.checkedprice += that.data.cartGoods[itemIndex].price
+                } else {
+                    that.data.cartTotal.checkedcount--
+                    that.data.cartTotal.checkedprice -= that.data.cartGoods[itemIndex].price
                 }
+
+
+                that.setData({
+                    cartGoods: that.data.cartGoods,
+                    cartTotal: that.data.cartTotal
+                });
 
                 that.setData({
                     checkedAllStatus: that.isCheckedAll()
