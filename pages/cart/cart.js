@@ -33,8 +33,6 @@ Page({
     getCartList: function () {
         let that = this;
         util.request(api.CartList).then(function (res) {
-            console.log("res.carttotal:", res.carttotal)
-
             that.setData({
                 cartGoods: res.cartlist,
                 cartTotal: res.carttotal
@@ -69,7 +67,6 @@ Page({
                     that.data.cartTotal.checkedcount--
                     that.data.cartTotal.checkedprice -= that.data.cartGoods[itemIndex].price
                 }
-
 
                 that.setData({
                     cartGoods: that.data.cartGoods,
@@ -226,7 +223,6 @@ Page({
             return false;
         }
 
-
         wx.navigateTo({
             url: '../shopping/checkout/checkout'
         })
@@ -252,7 +248,6 @@ Page({
                 return element.product_id;
             }
         });
-
 
         util.request(api.CartDelete, {
             productIds: productIds.join(',')
