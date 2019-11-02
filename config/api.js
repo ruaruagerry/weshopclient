@@ -21,8 +21,10 @@ module.exports = {
     CartUpdate: ApiRootUrl + 'cart/update', // 更新购物车的商品
     CartDelete: ApiRootUrl + 'cart/delete', // 删除购物车的商品
     CartChecked: ApiRootUrl + 'cart/checked', // 选择或取消选择商品
+    CartCheckedAll: ApiRootUrl + 'cart/checkedall', //全选
     CartCount: ApiRootUrl + 'cart/count', // 获取购物车商品件数
-    CartCheckout: ApiRootUrl + 'cart/checkout', // 下单前信息确认
+
+    ShopCheckout: ApiRootUrl + 'shop/checkout', // 下单前信息确认
 
     OrderSubmit: ApiRootUrl + 'order/submit', // 提交订单
     PayPrepayId: ApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id

@@ -1,18 +1,11 @@
 var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
+var app = getApp()
 
 Page({
     data: {
-        cartGoods: [],
-        cartTotal: {
-            "goodsCount": 0,
-            "goodsAmount": 0.00,
-            "checkedGoodsCount": 0,
-            "checkedGoodsAmount": 0.00
-        },
         isEditCart: false,
-        checkedAllStatus: true,
-        editCartList: []
+        checkedAllStatus: true
     },
     onLoad: function () {
 
@@ -62,10 +55,10 @@ Page({
                 that.data.cartGoods[itemIndex].checked = !that.data.cartGoods[itemIndex].checked
                 if (that.data.cartGoods[itemIndex].checked) {
                     that.data.cartTotal.checkedcount++
-                    that.data.cartTotal.checkedprice += that.data.cartGoods[itemIndex].price
+                    that.data.cartTotal.checkedprice += that.data.cartGoods[itemIndex].price * that.data.cartGoods[itemIndex].num
                 } else {
                     that.data.cartTotal.checkedcount--
-                    that.data.cartTotal.checkedprice -= that.data.cartGoods[itemIndex].price
+                    that.data.cartTotal.checkedprice -= that.data.cartGoods[itemIndex].price * that.data.cartGoods[itemIndex].num
                 }
 
                 that.setData({
@@ -90,59 +83,71 @@ Page({
             that.setData({
                 cartGoods: tmpCartData,
                 checkedAllStatus: that.isCheckedAll(),
-                'cartTotal.checkedGoodsCount': that.getCheckedGoodsCount()
+                'cartTotal.checkedcount': that.getCheckedCount()
             });
         }
     },
-    getCheckedGoodsCount: function () {
-        let checkedGoodsCount = 0;
+    getCheckedCount: function () {
+        let checkedcount = 0;
         this.data.cartGoods.forEach(function (v) {
             if (v.checked === true) {
-                checkedGoodsCount += v.number;
+                checkedcount++;
             }
         });
-        console.log(checkedGoodsCount);
-        return checkedGoodsCount;
+        return checkedcount;
     },
     checkedAll: function () {
         let that = this;
+        var ischeckedall = !this.isCheckedAll()
 
         if (!this.data.isEditCart) {
-            var productIds = this.data.cartGoods.map(function (v) {
-                return v.product_id;
-            });
-            util.request(api.CartChecked, { productIds: productIds.join(','), isChecked: that.isCheckedAll() ? 0 : 1 }, 'POST').then(function (res) {
-                if (res.errno === 0) {
-                    console.log(res.data);
-                    that.setData({
-                        cartGoods: res.data.cartList,
-                        cartTotal: res.data.cartTotal
-                    });
+            util.request(api.CartCheckedAll, { checkedall: ischeckedall }, "POST").then(function () {
+                if (ischeckedall) {
+                    for (var i = 0; i < that.data.cartGoods.length; i++) {
+                        that.data.cartGoods[i].checked = true
+                        that.data.cartTotal.checkedcount++
+                        that.data.cartTotal.checkedprice += that.data.cartGoods[i].price * that.data.cartGoods[i].num
+                    }
+                } else {
+                    for (var i = 0; i < that.data.cartGoods.length; i++) {
+                        that.data.cartGoods[i].checked = false
+                        that.data.cartTotal.checkedcount = 0
+                        that.data.cartTotal.checkedprice = 0
+                    }
                 }
 
                 that.setData({
-                    checkedAllStatus: that.isCheckedAll()
+                    cartGoods: that.data.cartGoods,
+                    cartTotal: that.data.cartTotal
+                });
+
+                that.setData({
+                    checkedAllStatus: ischeckedall
                 });
             });
         } else {
             //编辑状态
-            let checkedAllStatus = that.isCheckedAll();
             let tmpCartData = this.data.cartGoods.map(function (v) {
-                v.checked = !checkedAllStatus;
+                v.checked = ischeckedall;
                 return v;
             });
 
+            var checkedcount = 0
+            if (ischeckedall) {
+                checkedcount = that.data.cartGoods.length
+            }
+
             that.setData({
                 cartGoods: tmpCartData,
-                checkedAllStatus: that.isCheckedAll(),
-                'cartTotal.checkedGoodsCount': that.getCheckedGoodsCount()
+                checkedAllStatus: ischeckedall,
+                'cartTotal.checkedcount': checkedcount,
             });
         }
-
     },
     editCart: function () {
         var that = this;
         if (this.data.isEditCart) {
+            // 返回购物车界面
             this.getCartList();
             this.setData({
                 isEditCart: !this.data.isEditCart
@@ -153,65 +158,39 @@ Page({
                 v.checked = false;
                 return v;
             });
+
             this.setData({
-                editCartList: this.data.cartGoods,
                 cartGoods: tmpCartList,
                 isEditCart: !this.data.isEditCart,
                 checkedAllStatus: that.isCheckedAll(),
-                'cartTotal.checkedGoodsCount': that.getCheckedGoodsCount()
             });
         }
-
     },
-    updateCart: function (productId, goodsId, number, id) {
+    updateCart: function (index, deltanum) {
         let that = this;
 
-        util.request(api.CartUpdate, {
-            productId: productId,
-            goodsId: goodsId,
-            number: number,
-            id: id
-        }, 'POST').then(function (res) {
-            if (res.errno === 0) {
-                console.log(res.data);
-                that.setData({
-                    //cartGoods: res.data.cartList,
-                    //cartTotal: res.data.cartTotal
-                });
-            }
-
+        util.request(api.CartUpdate, { index: index, deltanum: deltanum }, 'POST').then(function () {
+            let cartItem = that.data.cartGoods[index];
+            cartItem.num = (cartItem.num + deltanum > 1) ? cartItem.num + deltanum : 1;
             that.setData({
+                cartGoods: that.data.cartGoods,
                 checkedAllStatus: that.isCheckedAll()
             });
         });
-
     },
     cutNumber: function (event) {
         let itemIndex = event.target.dataset.itemIndex;
-        let cartItem = this.data.cartGoods[itemIndex];
-        let number = (cartItem.number - 1 > 1) ? cartItem.number - 1 : 1;
-        cartItem.number = number;
-        this.setData({
-            cartGoods: this.data.cartGoods
-        });
-        this.updateCart(cartItem.product_id, cartItem.goods_id, number, cartItem.id);
+        this.updateCart(itemIndex, -1);
     },
     addNumber: function (event) {
         let itemIndex = event.target.dataset.itemIndex;
-        let cartItem = this.data.cartGoods[itemIndex];
-        let number = cartItem.number + 1;
-        cartItem.number = number;
-        this.setData({
-            cartGoods: this.data.cartGoods
-        });
-        this.updateCart(cartItem.product_id, cartItem.goods_id, number, cartItem.id);
-
+        this.updateCart(itemIndex, 1);
     },
     checkoutOrder: function () {
         //获取已选择的商品
         let that = this;
 
-        var checkedGoods = this.data.cartGoods.filter(function (element, index, array) {
+        var checkedGoods = that.data.cartGoods.filter(function (element) {
             if (element.checked == true) {
                 return true;
             } else {
@@ -223,6 +202,8 @@ Page({
             return false;
         }
 
+        app.checkedgoods = JSON.stringify(checkedGoods)
+
         wx.navigateTo({
             url: '../shopping/checkout/checkout'
         })
@@ -230,43 +211,27 @@ Page({
     deleteCart: function () {
         //获取已选择的商品
         let that = this;
-
-        let productIds = this.data.cartGoods.filter(function (element, index, array) {
-            if (element.checked == true) {
-                return true;
-            } else {
-                return false;
+        var indexarray = new Array();
+        for (var i = 0; i < that.data.cartGoods.length; i++) {
+            if (that.data.cartGoods[i].checked) {
+                indexarray.push(i)
             }
-        });
-
-        if (productIds.length <= 0) {
-            return false;
         }
 
-        productIds = productIds.map(function (element, index, array) {
-            if (element.checked == true) {
-                return element.product_id;
-            }
-        });
+        util.request(api.CartDelete, { indexs: indexarray }, 'POST').then(function () {
+            let cartList = that.data.cartGoods.filter(function (element) {
+                if (!element.checked) {
+                    return element
+                }
+            });
 
-        util.request(api.CartDelete, {
-            productIds: productIds.join(',')
-        }, 'POST').then(function (res) {
-            if (res.errno === 0) {
-                console.log(res.data);
-                let cartList = res.data.cartList.map(v => {
-                    console.log(v);
-                    v.checked = false;
-                    return v;
-                });
+            console.log("cartList:", cartList)
 
-                that.setData({
-                    cartGoods: cartList,
-                    cartTotal: res.data.cartTotal
-                });
-            }
+            let cartTotal = { "checkedcount": 0, "checkedprice": 0 }
 
             that.setData({
+                cartGoods: cartList,
+                cartTotal: cartTotal,
                 checkedAllStatus: that.isCheckedAll()
             });
         });

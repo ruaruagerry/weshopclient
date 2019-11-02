@@ -32,7 +32,7 @@
                                         <view class="cut" bindtap="cutNumber" data-item-index="{{index}}">
                                             -
                                         </view>
-                                        <input value="{{item.number}}" class="number" disabled="true" type="number" />
+                                        <input value="{{item.num}}" class="num" disabled="true" type="num" />
                                         <view class="add" bindtap="addNumber" data-item-index="{{index}}">
                                             +
                                         </view>
