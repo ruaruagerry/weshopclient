@@ -1,12 +1,11 @@
 var util = require('../../../utils/util.js');
 var api = require('../../../config/api.js');
-var app = getApp();
 
 Page({
     data: {
-        addressList: [],
+
     },
-    onLoad: function (options) {
+    onLoad: function () {
         // 页面初始化 options为页面跳转所带来的参数
         this.getAddressList();
     },
@@ -19,18 +18,16 @@ Page({
     },
     getAddressList () {
         let that = this;
-        util.request(api.AddressList).then(function (res) {
-            if (res.errno === 0) {
-                that.setData({
-                    addressList: res.data
-                });
-            }
+        util.request(api.ShopAddressList).then(function (res) {
+            that.setData({
+                addressList: res.addresslist
+            });
         });
     },
     addressAddOrUpdate (event) {
         console.log(event)
         wx.navigateTo({
-            url: '/pages/shopping/addressAdd/addressAdd?id=' + event.currentTarget.dataset.addressId
+            url: '/pages/shopping/addressAdd/addressAdd?address=' + JSON.stringify(event.currentTarget.dataset.address)
         })
     },
     selectAddress (event) {

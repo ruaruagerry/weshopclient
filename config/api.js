@@ -25,8 +25,12 @@ module.exports = {
     CartCount: ApiRootUrl + 'cart/count', // 获取购物车商品件数
 
     ShopCheckout: ApiRootUrl + 'shop/checkout', // 下单前信息确认
+    ShopAddressList: ApiRootUrl + 'shop/address/list',  //收货地址列表
+    ShopAddressDetail: ApiRootUrl + 'shop/address/detail',  //收货地址详情
+    ShopAddressSave: ApiRootUrl + 'shop/address/save',  //保存收货地址
+    ShopAddressDelete: ApiRootUrl + 'shop/address/delete',  //保存收货地址
+    ShopOrderSubmit: ApiRootUrl + 'shop/order/create', // 提交订单
 
-    OrderSubmit: ApiRootUrl + 'order/submit', // 提交订单
     PayPrepayId: ApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id
 
     CollectList: ApiRootUrl + 'collect/list',  //收藏列表
@@ -44,11 +48,6 @@ module.exports = {
     SearchResult: ApiRootUrl + 'search/result',  //搜索数据
     SearchHelper: ApiRootUrl + 'search/helper',  //搜索帮助
     SearchClearHistory: ApiRootUrl + 'search/clearhistory',  //搜索帮助
-
-    AddressList: ApiRootUrl + 'address/list',  //收货地址列表
-    AddressDetail: ApiRootUrl + 'address/detail',  //收货地址详情
-    AddressSave: ApiRootUrl + 'address/save',  //保存收货地址
-    AddressDelete: ApiRootUrl + 'address/delete',  //保存收货地址
 
     RegionList: ApiRootUrl + 'region/list',  //获取区域列表
 

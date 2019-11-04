@@ -30,6 +30,7 @@
         "pages/shopping/checkout/checkout",
         "pages/shopping/address/address",
         "pages/shopping/addressAdd/addressAdd",
+        "pages/shopping/pay/pay",
         "pages/goods/goods",
         "pages/topicDetail/topicDetail"
     ],

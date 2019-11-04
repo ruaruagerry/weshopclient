@@ -3,7 +3,7 @@
         <view class="address-item" bindtap="selectAddress" wx:if="{{checkedAddress.addressid != ''}}">
             <view class="l">
                 <text class="name">{{checkedAddress.name}}</text>
-                <text class="default">默认</text>
+                <text class="default">{{checkedAddress.isdefault}}</text>
             </view>
             <view class="m">
                 <text class="mobile">{{checkedAddress.mobile}}</text>

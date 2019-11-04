@@ -11,17 +11,7 @@ Page({
         couponId: 0
     },
     onLoad: function () {
-        // 页面初始化 options为页面跳转所带来的参数
-        try {
-            var addressId = wx.getStorageSync('addressId');
-            if (addressId) {
-                this.setData({
-                    'addressId': addressId
-                });
-            }
-        } catch (e) {
-            // Do something when catch error
-        }
+
     },
     getCheckoutInfo: function () {
         let that = this;
@@ -78,25 +68,28 @@ Page({
 
     },
     submitOrder: function () {
-        if (this.data.addressId <= 0) {
+        if (this.data.checkedAddress.addressid == "") {
             util.showErrorToast('请选择收货地址');
             return false;
         }
-        util.request(api.OrderSubmit, { addressId: this.data.addressId, couponId: this.data.couponId }, 'POST').then(res => {
-            if (res.errno === 0) {
-                const orderId = res.data.orderInfo.id;
-                pay.payOrder(parseInt(orderId)).then(res => {
-                    wx.redirectTo({
-                        url: '/pages/payResult/payResult?status=1&orderId=' + orderId
-                    });
-                }).catch(res => {
-                    wx.redirectTo({
-                        url: '/pages/payResult/payResult?status=0&orderId=' + orderId
-                    });
-                });
-            } else {
-                util.showErrorToast('下单失败');
-            }
+
+        util.request(api.ShopOrderSubmit, { addressid: this.data.checkedAddress.addressid }, 'POST').then(res => {
+            console.log("res:", res)
+
+            wx.navigateTo({
+                url: '/pages/shopping/pay/pay?wxpayurl=' + res.wxpayurl + '&zfbpayurl=' + res.zfbpayurl
+            })
+
+            // const orderId = res.orderid;
+            // pay.payOrder(parseInt(orderId)).then(res => {
+            //     wx.redirectTo({
+            //         url: '/pages/payResult/payResult?status=1&orderId=' + orderId
+            //     });
+            // }).catch(res => {
+            //     wx.redirectTo({
+            //         url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+            //     });
+            // });
         });
     }
 })

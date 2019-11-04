@@ -1,0 +1,8 @@
+<view class="container">
+    <view class="pay">
+        <image class="img" src="{{wxpayURL}}" width="80" height="200"></image>
+        <div style="margin-left:100px;">
+            <image class="img" src="{{zfbpayURL}}" width="80" height="100"></image>
+        </div>
+    </view>
+</view>
