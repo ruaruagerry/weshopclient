@@ -33,11 +33,13 @@ module.exports = {
     ShopOrderList: ApiRootUrl + 'shop/order/list',  //订单列表
     ShopOrderDetail: ApiRootUrl + 'shop/order/detail',  //订单详情
     ShopOrderCancel: ApiRootUrl + 'shop/order/cancel',  //取消订单
+    ShopCollectAdd: ApiRootUrl + 'shop/collect/add',  //添加收藏
+    ShopCollectDelete: ApiRootUrl + 'shop/collect/delete',  //添加收藏
 
     PayPrepayId: ApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id
 
     CollectList: ApiRootUrl + 'collect/list',  //收藏列表
-    CollectAddOrDelete: ApiRootUrl + 'collect/addordelete',  //添加或取消收藏
+
 
     CommentList: ApiRootUrl + 'comment/list',  //评论列表
     CommentCount: ApiRootUrl + 'comment/count',  //评论总数

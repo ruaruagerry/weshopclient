@@ -135,7 +135,7 @@
     </view>
 </view>
 <view class="bottom-btn">
-    <view class="l l-collect" bindtap="addCannelCollect">
+    <view class="l l-collect" bindtap="Collect">
         <image class="icon" src="{{ collectBackImage }}"></image>
     </view>
     <view class="l l-cart">

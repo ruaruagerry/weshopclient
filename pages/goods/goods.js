@@ -45,11 +45,11 @@ Page({
 
                 if (that.data.userHasCollect == 1) {
                     that.setData({
-                        'collectBackImage': that.data.hasCollectImage
+                        collectBackImage: that.data.hasCollectImage
                     });
                 } else {
                     that.setData({
-                        'collectBackImage': that.data.noCollectImage
+                        collectBackImage: that.data.noCollectImage
                     });
                 }
 
@@ -81,7 +81,7 @@ Page({
             }
         }
         this.setData({
-            'specificationList': _specificationList
+            specificationList: _specificationList
         });
         //重新计算spec改变后的信息
         this.changeSpecInfo();
@@ -142,11 +142,11 @@ Page({
         });
         if (checkedValue.length > 0) {
             this.setData({
-                'checkedSpecText': checkedValue.join('　')
+                checkedSpecText: checkedValue.join('　')
             });
         } else {
             this.setData({
-                'checkedSpecText': '请选择规格数量'
+                checkedSpecText: '请选择规格数量'
             });
         }
 
@@ -179,31 +179,25 @@ Page({
             openAttr: false,
         });
     },
-    addCannelCollect: function () {
+    Collect: function () {
         let that = this;
-        //添加或是取消收藏
-        util.request(api.CollectAddOrDelete, { typeId: 0, valueId: this.data.id }, "POST")
-            .then(function (res) {
-                let _res = res;
-                if (_res.errno == 0) {
-                    if (_res.data.type == 'add') {
-                        that.setData({
-                            'collectBackImage': that.data.hasCollectImage
-                        });
-                    } else {
-                        that.setData({
-                            'collectBackImage': that.data.noCollectImage
-                        });
-                    }
-
-                } else {
-                    wx.showToast({
-                        image: '/static/images/icon_error.png',
-                        title: _res.errmsg,
-                        mask: true
+        if (that.data.userHasCollect == 1) {
+            util.request(api.ShopCollectDelete, { goodid: that.data.good.goodid }, "POST")
+                .then(function () {
+                    that.setData({
+                        userHasCollect: 0,
+                        collectBackImage: that.data.noCollectImage
                     });
-                }
-            });
+                });
+        } else {
+            util.request(api.ShopCollectAdd, { goodid: that.data.good.goodid }, "POST")
+                .then(function () {
+                    that.setData({
+                        userHasCollect: 1,
+                        collectBackImage: that.data.hasCollectImage
+                    });
+                });
+        }
     },
     openCartPage: function () {
         wx.switchTab({
