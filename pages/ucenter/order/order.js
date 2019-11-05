@@ -7,11 +7,10 @@ Page({
     },
     onLoad: function () {
         // 页面初始化 options为页面跳转所带来的参数
-        this.getOrderList();
     },
     getOrderList () {
         let that = this;
-        util.request(api.OrderList).then(function (res) {
+        util.request(api.ShopOrderList).then(function (res) {
             console.log(res.orderlist);
             that.setData({
                 orderList: res.orderlist
@@ -28,6 +27,7 @@ Page({
     },
     onShow: function () {
         // 页面显示
+        this.getOrderList();
     },
     onHide: function () {
         // 页面隐藏

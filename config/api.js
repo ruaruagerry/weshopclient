@@ -31,6 +31,8 @@ module.exports = {
     ShopAddressDelete: ApiRootUrl + 'shop/address/delete',  //保存收货地址
     ShopOrderSubmit: ApiRootUrl + 'shop/order/create', // 提交订单
     ShopOrderList: ApiRootUrl + 'shop/order/list',  //订单列表
+    ShopOrderDetail: ApiRootUrl + 'shop/order/detail',  //订单详情
+    ShopOrderCancel: ApiRootUrl + 'shop/order/cancel',  //取消订单
 
     PayPrepayId: ApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id
 
@@ -52,8 +54,7 @@ module.exports = {
 
     RegionList: ApiRootUrl + 'region/list',  //获取区域列表
 
-    OrderDetail: ApiRootUrl + 'order/detail',  //订单详情
-    OrderCancel: ApiRootUrl + 'order/cancel',  //取消订单
+
     OrderExpress: ApiRootUrl + 'order/express', //物流详情
 
     FootprintList: ApiRootUrl + 'footprint/list',  //足迹列表
