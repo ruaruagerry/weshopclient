@@ -6,7 +6,6 @@ const app = getApp();
 Page({
     data: {
         userInfo: {},
-        showLoginDialog: false
     },
     onLoad: function (options) {
         // 页面初始化 options为页面跳转所带来的参数
@@ -26,27 +25,6 @@ Page({
     onUnload: function () {
         // 页面关闭
     },
-
-    onUserInfoClick: function () {
-        if (wx.getStorageSync('token')) {
-
-        } else {
-            this.showLoginDialog();
-        }
-    },
-
-    showLoginDialog () {
-        this.setData({
-            showLoginDialog: true
-        })
-    },
-
-    onCloseLoginDialog () {
-        this.setData({
-            showLoginDialog: false
-        })
-    },
-
     onDialogBody () {
         // 阻止冒泡
     },
@@ -62,7 +40,7 @@ Page({
             return false
         }
         util.login().then((res) => {
-            console.log("login res:"+ res+", detail:", e.detail)
+            console.log("login res:" + res + ", detail:", e.detail)
 
             return util.request(api.AuthLoginByWeixin, {
                 code: res,
