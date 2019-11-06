@@ -1,8 +1,6 @@
 var util = require('../../../utils/util.js');
 var api = require('../../../config/api.js');
 
-var app = getApp();
-
 Page({
     data: {
         typeId: 0,
@@ -10,16 +8,14 @@ Page({
     },
     getCollectList () {
         let that = this;
-        util.request(api.CollectList, { typeId: that.data.typeId }).then(function (res) {
-            if (res.errno === 0) {
-                console.log(res.data);
-                that.setData({
-                    collectList: res.data.data
-                });
-            }
+        util.request(api.ShopCollectList).then(function (res) {
+            console.log(res.collectlist);
+            that.setData({
+                collectList: res.collectlist
+            });
         });
     },
-    onLoad: function (options) {
+    onLoad: function () {
         this.getCollectList();
     },
     onReady: function () {
@@ -38,7 +34,7 @@ Page({
     openGoods (event) {
 
         let that = this;
-        let goodsId = this.data.collectList[event.currentTarget.dataset.index].value_id;
+        let good = this.data.collectList[event.currentTarget.dataset.index];
 
         //触摸时间距离页面打开的毫秒数
         var touchTime = that.data.touch_end - that.data.touch_start;
@@ -50,25 +46,31 @@ Page({
                 content: '确定删除吗？',
                 success: function (res) {
                     if (res.confirm) {
+                        util.request(api.ShopCollectDelete, { goodid: good.goodid }, 'POST').then(function () {
+                            var collectList = that.data.collectList.filter(function (element) {
+                                if (element.goodid != good.goodid) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            });
 
-                        util.request(api.ShopCollect, { typeId: that.data.typeId, valueId: goodsId }, 'POST').then(function (res) {
-                            if (res.errno === 0) {
-                                console.log(res.data);
-                                wx.showToast({
-                                    title: '删除成功',
-                                    icon: 'success',
-                                    duration: 2000
-                                });
-                                that.getCollectList();
-                            }
+                            that.setData({
+                                collectList: collectList
+                            });
+
+                            wx.showToast({
+                                title: '删除成功',
+                                icon: 'success',
+                                duration: 2000
+                            });
                         });
                     }
                 }
             })
         } else {
-
             wx.navigateTo({
-                url: '/pages/goods/goods?id=' + goodsId,
+                url: '/pages/goods/goods?good=' + encodeURIComponent(JSON.stringify(good)),
             });
         }
     },

@@ -35,11 +35,9 @@ module.exports = {
     ShopOrderCancel: ApiRootUrl + 'shop/order/cancel',  //取消订单
     ShopCollectAdd: ApiRootUrl + 'shop/collect/add',  //添加收藏
     ShopCollectDelete: ApiRootUrl + 'shop/collect/delete',  //添加收藏
+    ShopCollectList: ApiRootUrl + 'shop/collect/list',  //收藏列表
 
     PayPrepayId: ApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id
-
-    CollectList: ApiRootUrl + 'collect/list',  //收藏列表
-
 
     CommentList: ApiRootUrl + 'comment/list',  //评论列表
     CommentCount: ApiRootUrl + 'comment/count',  //评论总数

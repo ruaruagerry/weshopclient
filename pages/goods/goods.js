@@ -40,7 +40,7 @@ Page({
                     issueList: res.issue,
                     brand: res.brand,
                     specificationList: res.specification,
-                    userHasCollect: 1
+                    userHasCollect: res.collect,
                 });
 
                 if (that.data.userHasCollect == 1) {
