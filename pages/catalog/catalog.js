@@ -8,7 +8,7 @@ Page({
         categoryIndex: 0,
     },
     onLoad: function () {
-        this.getCatalog();
+
     },
     getCatalog: function () {
         //CatalogList
@@ -46,6 +46,7 @@ Page({
     },
     onShow: function () {
         // 页面显示
+        this.getCatalog();
     },
     onHide: function () {
         // 页面隐藏

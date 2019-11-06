@@ -70,10 +70,53 @@ function utf8_decode (utftext) { // utf-8解码
 }
 
 /**
+ *
+ * 检测微信是否登录
+ */
+function checklogin () {
+    if (wx.getStorageSync('token')) {
+        return true
+    }
+
+    // 微信登录
+    let code = null;
+    return login().then((res) => {
+        code = res.code;
+        return getUserInfo();
+    }).then((userInfo) => {
+        //登录远程服务器
+        request(api.AuthLogin, { code: code, userInfo: userInfo }, 'POST').then(res => {
+            if (res.data.result == 0) {
+                //存储用户信息
+                wx.setStorageSync('userInfo', res.data.userInfo);
+                wx.setStorageSync('token', res.data.token);
+                return true
+            }
+        }).catch((err) => {
+            console.log("authlogin err:", err)
+            wx.switchTab({
+                url: '/pages/ucenter/index/index'
+            });
+        });
+    }).catch((err) => {
+        console.log("getuserinfo err:", err)
+        wx.switchTab({
+            url: '/pages/ucenter/index/index'
+        });
+    })
+};
+
+
+/**
  * 封封微信的的request
  */
 function request (url, data = {}, method = "GET") {
     return new Promise(function (resolve, reject) {
+        if (url != api.AuthLogin) {
+            checklogin()
+            return
+        }
+
         wx.request({
             url: url,
             data: data,
@@ -82,7 +125,6 @@ function request (url, data = {}, method = "GET") {
                 'Content-Type': 'application/json',
                 'X-Nideshop-Token': wx.getStorageSync('token')
             },
-
             success: function (res) {
                 if (res.statusCode == 200) {
                     // server logic
@@ -100,33 +142,6 @@ function request (url, data = {}, method = "GET") {
                         jsondata = JSON.parse(res.data.data)
                     }
                     resolve(jsondata)
-                    // 微信登录
-                    // if (res.data.errno == 401) {
-                    //     let code = null;
-                    //     return login().then((res) => {
-                    //         code = res.code;
-                    //         return getUserInfo();
-                    //     }).then((userInfo) => {
-                    //         //登录远程服务器
-                    //         request(api.AuthLoginByWeixin, { code: code, userInfo: userInfo }, 'POST').then(res => {
-                    //             if (res.errno === 0) {
-                    //                 //存储用户信息
-                    //                 wx.setStorageSync('userInfo', res.data.userInfo);
-                    //                 wx.setStorageSync('token', res.data.token);
-
-                    //                 resolve(res);
-                    //             } else {
-                    //                 reject(res);
-                    //             }
-                    //         }).catch((err) => {
-                    //             reject(err);
-                    //         });
-                    //     }).catch((err) => {
-                    //         reject(err);
-                    //     })
-                    // } else {
-                    //     resolve(res.data);
-                    // }
                 } else {
                     reject(res.errMsg);
                 }
@@ -188,7 +203,8 @@ function getUserInfo () {
         wx.getUserInfo({
             withCredentials: true,
             success: function (res) {
-                if (res.detail.errMsg === 'getUserInfo:ok') {
+                console.log("111 res:", res)
+                if (res.errMsg === 'getUserInfo:ok') {
                     resolve(res);
                 } else {
                     reject(res)
@@ -202,7 +218,6 @@ function getUserInfo () {
 }
 
 function redirect (url) {
-
     //判断页面是否需要登录
     if (false) {
         wx.redirectTo({
@@ -233,6 +248,7 @@ module.exports = {
     checkSession,
     login,
     getUserInfo,
+    checklogin
 }
 
 
