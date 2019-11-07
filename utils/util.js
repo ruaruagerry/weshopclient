@@ -76,10 +76,10 @@ function utf8_decode (utftext) { // utf-8解码
 function request (url, data = {}, method = "GET") {
     return new Promise(function (resolve, reject) {
         if (url != api.AuthLogin && !app.globalData.token) {
-            showErrorToast("请先登录")
             wx.switchTab({
                 url: '/pages/ucenter/index/index'
             });
+            showErrorToast("请先登录")
             return
         }
 
@@ -95,6 +95,20 @@ function request (url, data = {}, method = "GET") {
                 if (res.statusCode == 200) {
                     // server logic
                     if (res.data.result != 0) {
+                        // token过期
+                        if (res.data.result == 11) {
+                            app.globalData.token = ""
+                            app.globalData.userinfo = {
+                                nickname: '',
+                                avatarurl: 'http://yanxuan.nosdn.127.net/8945ae63d940cc42406c3f67019c5cb6.png'
+                            }
+                            wx.switchTab({
+                                url: '/pages/ucenter/index/index'
+                            });
+                            showErrorToast("请重新登录")
+                            return
+                        }
+
                         showErrorToast("result:" + res.data.result + ", msg:" + res.data.msg)
                         reject(res.data.msg)
                     }
@@ -195,7 +209,8 @@ function redirect (url) {
 function showErrorToast (msg) {
     wx.showToast({
         title: msg,
-        image: '/static/images/icon_error.png'
+        image: '/static/images/icon_error.png',
+        duration: 2000,
     })
 }
 
