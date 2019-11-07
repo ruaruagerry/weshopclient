@@ -84,6 +84,7 @@ function checklogin () {
         code = res.code;
         return getUserInfo();
     }).then((userInfo) => {
+        console.log("code:" + code + ", userinfo:", userInfo)
         //登录远程服务器
         request(api.AuthLogin, { code: code, userInfo: userInfo }, 'POST').then(res => {
             if (res.data.result == 0) {

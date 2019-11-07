@@ -1,11 +1,14 @@
 <view class="container">
     <view class="profile-info">
-        <image bindtap="onWechatLogin" class="avatar" src="{{userInfo.avatar}}"></image>
+        <!-- <button open-type='getUserInfo'>获取授权</button> -->
+        <image class="avatar" src="{{userInfo.avatar}}"></image>
         <view class="info">
-            <text class='name' bindtap='onWechatLogin'>{{ userInfo.nickname || '点击登录' }}</text>
+            <text class='name'>{{ userInfo.nickname }}</text>
             <!-- <text class='level' bindtap='onUserInfoClick'></text> -->
         </view>
-        <image bindtap="onWechatLogin" class='btn' src='/static/images/address_right.png'></image>
+        <button wx-if="{{userInfo.nickname==''}}" type="primary" open-type="getUserInfo" bindgetuserinfo="onWechatLogin">
+            点击登录
+        </button>
     </view>
     <view class="user-menu">
         <view class="item">
