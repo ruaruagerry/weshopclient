@@ -8,10 +8,12 @@ Page({
     },
     onLoad: function () {
         // 页面初始化 options为页面跳转所带来的参数
-        util.getUserInfo().then((res) => {
-            var e = { "detail": res }
-            this.onWechatLogin(e)
-        });
+        if (!app.globalData.token) {
+            util.getUserInfo().then((res) => {
+                var e = { "detail": res }
+                this.onWechatLogin(e)
+            });
+        }
     },
     onReady: function () {
 
@@ -33,8 +35,6 @@ Page({
     },
 
     onWechatLogin (e) {
-        console.log("########## e:", e)
-
         if (e.detail.errMsg !== 'getUserInfo:ok') {
             if (e.detail.errMsg === 'getUserInfo:fail auth deny') {
                 return false
