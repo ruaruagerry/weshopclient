@@ -1,4 +1,5 @@
 var api = require('../config/api.js')
+var app = getApp();
 
 function formatTime (date) {
     var year = date.getFullYear()
@@ -70,51 +71,15 @@ function utf8_decode (utftext) { // utf-8解码
 }
 
 /**
- *
- * 检测微信是否登录
- */
-function checklogin () {
-    if (wx.getStorageSync('token')) {
-        return true
-    }
-
-    // 微信登录
-    let code = null;
-    return login().then((res) => {
-        code = res.code;
-        return getUserInfo();
-    }).then((userInfo) => {
-        console.log("code:" + code + ", userinfo:", userInfo)
-        //登录远程服务器
-        request(api.AuthLogin, { code: code, userInfo: userInfo }, 'POST').then(res => {
-            if (res.data.result == 0) {
-                //存储用户信息
-                wx.setStorageSync('userInfo', res.data.userInfo);
-                wx.setStorageSync('token', res.data.token);
-                return true
-            }
-        }).catch((err) => {
-            console.log("authlogin err:", err)
-            wx.switchTab({
-                url: '/pages/ucenter/index/index'
-            });
-        });
-    }).catch((err) => {
-        console.log("getuserinfo err:", err)
-        wx.switchTab({
-            url: '/pages/ucenter/index/index'
-        });
-    })
-};
-
-
-/**
  * 封封微信的的request
  */
 function request (url, data = {}, method = "GET") {
     return new Promise(function (resolve, reject) {
-        if (url != api.AuthLogin) {
-            checklogin()
+        if (url != api.AuthLogin && !app.globalData.token) {
+            showErrorToast("请先登录")
+            wx.switchTab({
+                url: '/pages/ucenter/index/index'
+            });
             return
         }
 
@@ -124,17 +89,13 @@ function request (url, data = {}, method = "GET") {
             method: method,
             header: {
                 'Content-Type': 'application/json',
-                'X-Nideshop-Token': wx.getStorageSync('token')
+                'Session': app.globalData.token,
             },
             success: function (res) {
                 if (res.statusCode == 200) {
                     // server logic
                     if (res.data.result != 0) {
-                        wx.showToast({
-                            title: "result:" + res.data.result + ", msg:" + res.data.msg,
-                            icon: 'none',
-                            duration: 2000//持续的时间
-                        })
+                        showErrorToast("result:" + res.data.result + ", msg:" + res.data.msg)
                         reject(res.data.msg)
                     }
                     var jsondata = new Object()
@@ -152,7 +113,7 @@ function request (url, data = {}, method = "GET") {
                 console.log("failed")
             }
         })
-    });
+    })
 }
 
 function get (url, data = {}) {
@@ -204,7 +165,6 @@ function getUserInfo () {
         wx.getUserInfo({
             withCredentials: true,
             success: function (res) {
-                console.log("111 res:", res)
                 if (res.errMsg === 'getUserInfo:ok') {
                     resolve(res);
                 } else {
@@ -249,7 +209,6 @@ module.exports = {
     checkSession,
     login,
     getUserInfo,
-    checklogin
 }
 
 

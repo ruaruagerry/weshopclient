@@ -1,7 +1,7 @@
 <view class="container">
     <view class="profile-info">
         <!-- <button open-type='getUserInfo'>获取授权</button> -->
-        <image class="avatar" src="{{userInfo.avatar}}"></image>
+        <image class="avatar" src="{{userInfo.avatarurl}}"></image>
         <view class="info">
             <text class='name'>{{ userInfo.nickname }}</text>
             <!-- <text class='level' bindtap='onUserInfoClick'></text> -->
