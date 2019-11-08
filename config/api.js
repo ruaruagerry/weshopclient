@@ -1,4 +1,4 @@
-const ApiRootUrl = 'http://127.0.0.1:3001/';
+const ApiRootUrl = 'https://www.gerryluo.com/weshop/';
 
 module.exports = {
     CatalogList: ApiRootUrl + 'catalog/index',  //分类目录全部分类数据接口

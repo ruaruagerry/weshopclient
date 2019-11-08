@@ -34,7 +34,7 @@
     "window": {
         "backgroundTextStyle": "dark",
         "navigationBarBackgroundColor": "#fff",
-        "navigationBarTitleText": "仿网易严选",
+        "navigationBarTitleText": "巷子小店",
         "navigationBarTextStyle": "black",
         "enablePullDownRefresh": true
     },
