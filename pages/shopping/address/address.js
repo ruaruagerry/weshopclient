@@ -3,7 +3,7 @@ var api = require('../../../config/api.js');
 
 Page({
     data: {
-
+        loading: false,
     },
     onLoad: function () {
         // 页面初始化 options为页面跳转所带来的参数
@@ -16,13 +16,23 @@ Page({
         // 页面显示
 
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getAddressList();
+            wx.stopPullDownRefresh()
+        }
+    },
+
     getAddressList () {
         let that = this;
+        that.loading = true
         util.request(api.ShopAddressList).then(function (res) {
             that.setData({
                 addressList: res.addresslist
             });
         });
+        that.loading = false
     },
     addressAddOrUpdate (event) {
         console.log(event)

@@ -4,6 +4,7 @@ var app = getApp();
 
 Page({
     data: {
+        loading: false,
         addressList: [],
     },
     onLoad: function (options) {
@@ -17,13 +18,22 @@ Page({
         // 页面显示
 
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getAddressList();
+            wx.stopPullDownRefresh()
+        }
+    },
     getAddressList () {
         let that = this;
+        that.loading = true
         util.request(api.ShopAddressList).then(function (res) {
             that.setData({
                 addressList: res.addresslist
             });
         });
+        that.loading = false
     },
     addressAddOrUpdate (event) {
         console.log(event)

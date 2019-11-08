@@ -4,15 +4,24 @@ var app = getApp()
 
 Page({
     data: {
+        loading: false,
         navListIndex: 0,
         categoryIndex: 0,
     },
     onLoad: function () {
 
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getCatalog()
+            wx.stopPullDownRefresh()
+        }
+    },
     getCatalog: function () {
         //CatalogList
         let that = this;
+        that.loading = true
         wx.showLoading({
             title: '加载中...',
         });
@@ -30,6 +39,7 @@ Page({
                 goodsCount: res.goodscount
             });
         });
+        that.loading = false
     },
     getCurrentCategory: function (id) {
         let that = this;

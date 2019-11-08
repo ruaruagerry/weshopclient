@@ -5,6 +5,7 @@ var api = require('../../config/api.js');
 
 Page({
     data: {
+        loading: false,
         cartGoodsCount: 0,
         userHasCollect: 0,
         number: 1,
@@ -30,8 +31,23 @@ Page({
 
         this.getGoodsInfo();
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            var that = this;
+            util.request(api.CartCount).then(function (res) {
+                that.setData({
+                    cartGoodsCount: res.carttotal
+                });
+            });
+
+            this.getGoodsInfo();
+            wx.stopPullDownRefresh()
+        }
+    },
     getGoodsInfo: function () {
         let that = this;
+        that.loading = true
         util.request(api.GoodsDetail, { goodid: that.data.good.goodid }, "POST")
             .then(function (res) {
                 that.setData({
@@ -55,6 +71,7 @@ Page({
 
                 WxParse.wxParse('goodsDetail', 'html', that.data.good.describe, that);
             });
+        that.loading = false
     },
     clickSkuValue: function (event) {
         let specSpecificationid = event.currentTarget.dataset.specificationId;

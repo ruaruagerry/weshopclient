@@ -4,6 +4,7 @@ var app = getApp()
 
 Page({
     data: {
+        loading: false,
         // text:"这是一个页面"
         goodsList: [],
         currentCategory: {},
@@ -30,8 +31,16 @@ Page({
 
         this.getGoodsList();
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getGoodsList()
+            wx.stopPullDownRefresh()
+        }
+    },
     getGoodsList: function () {
         let that = this;
+        that.loading = true
         util.request(api.GoodsList, { categoryid: this.data.categoryid }, "POST")
             .then(function (res) {
                 // category index
@@ -56,6 +65,7 @@ Page({
                     });
                 }
             });
+        that.loading = false
     },
     onReady: function () {
         // 页面渲染完成

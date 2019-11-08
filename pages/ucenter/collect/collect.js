@@ -3,17 +3,20 @@ var api = require('../../../config/api.js');
 
 Page({
     data: {
+        loading: false,
         typeId: 0,
         collectList: []
     },
     getCollectList () {
         let that = this;
+        that.loading = true
         util.request(api.ShopCollectList).then(function (res) {
             console.log(res.collectlist);
             that.setData({
                 collectList: res.collectlist
             });
         });
+        that.loading = false
     },
     onLoad: function () {
         this.getCollectList();
@@ -30,6 +33,13 @@ Page({
     },
     onUnload: function () {
         // 页面关闭
+    },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getCollectList();
+            wx.stopPullDownRefresh()
+        }
     },
     openGoods (event) {
 

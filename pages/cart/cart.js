@@ -4,6 +4,7 @@ var app = getApp()
 
 Page({
     data: {
+        loading: false,
         isEditCart: false,
         checkedAllStatus: true
     },
@@ -23,8 +24,16 @@ Page({
     onUnload: function () {
         // 页面关闭
     },
+    onPullDownRefresh () {
+        // 上拉刷新
+        if (!this.loading) {
+            this.getCartList()
+            wx.stopPullDownRefresh()
+        }
+    },
     getCartList: function () {
         let that = this;
+        that.loading = true
         util.request(api.CartList).then(function (res) {
             that.setData({
                 cartGoods: res.cartlist,
@@ -34,6 +43,8 @@ Page({
             that.setData({
                 checkedAllStatus: that.isCheckedAll()
             });
+
+            that.loading = false
         });
     },
     isCheckedAll: function () {
