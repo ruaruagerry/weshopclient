@@ -34,12 +34,12 @@ Page({
     getCurrentCategory: function (id) {
         let that = this;
         let param = { id: id }
-        util.request(api.CatalogCurrent, param, "POST")
-            .then(function (res) {
-                that.setData({
-                    categoryList: res.categorylist
-                });
+        util.request(api.CatalogCurrent, param, "POST").then(function (res) {
+            app.categoryList = res.categorylist
+            that.setData({
+                categoryList: res.categorylist
             });
+        });
     },
     onReady: function () {
         // 页面渲染完成
