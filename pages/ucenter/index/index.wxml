@@ -41,13 +41,6 @@
                 <text class="txt">帮助中心</text>
             </navigator>
         </view>
-        <view class="item no-border"></view>
-        <text class="itemtxt">
-            <text class="txt">
-                承接各类公司资质业务(ICP,文网文,软著等)，品质保障，急速下证。
-                联系电话：18576710382
-            </text>
-        </text>
     </view>
     <!-- <view class="logout" bindtap="exitLogin">退出登录</view> -->
 </view>
